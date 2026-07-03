@@ -36,10 +36,10 @@ jobs:
 
     - name: "Decompile Scripts"
       if: ${{ github.event_name == 'workflow_dispatch' }}
-      run: dotnet run --project ./tool/UnturnedScriptsDecompiler/UnturnedScriptsDecompiler/UnturnedScriptsDecompiler.csproj -c Release --no-restore -- ${{ github.workspace }} ${{ github.workspace }}/steam ${{ github.event_name == 'workflow_dispatch' }}
+      run: dotnet run --project ./tool/UnturnedScriptsDecompiler/UnturnedScriptsDecompiler.csproj -c Release --no-restore -- ${{ github.workspace }} ${{ github.workspace }}/steam ${{ github.event_name == 'workflow_dispatch' }}
     
     - name: "Copy THIRDPARTYNOTICES.txt"
-      run: cp /steam/THIRDPARTYNOTICES.txt THIRDPARTYNOTICES.txt
+      run: cp steam/THIRDPARTYNOTICES.txt THIRDPARTYNOTICES.txt
     
     - name: "Forward Commit Message"
       run: |
