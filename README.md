@@ -14,5 +14,7 @@ The content within this repository is exclusively for educational and modding pu
 Users are directed to review the Unturned End User License Agreement (EULA)                 
 https://store.steampowered.com/eula/304930_eula_1
 
+This project has been given explicit permission to decompile Unturned Scripts and share them publicly. Read more about it in detail [here](https://github.com/Unturned-Scripts/UnturnedScripts/issues/1).
+
 ## Special Thanks
 Massive thanks goes to DiffoZ's [Unturned Datamining](https://github.com/Unturned-Datamining/Unturned-Datamining) project for helping me figure out how to set this up.
