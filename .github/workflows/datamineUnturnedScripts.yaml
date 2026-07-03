@@ -1,8 +1,5 @@
 name: "Datamine Unturned Scripts"
 
-permissions:
-  contents: write
-
 on:
   schedule:
     - cron: '0 6 * * *'
@@ -52,6 +49,7 @@ jobs:
       
     - name: "Git Commit"
       run: |
+        git config --global user.email "gamingtoday093@users.noreply.github.com"
         git config --global user.name "Gamingtoday093"
         
         git add -A
