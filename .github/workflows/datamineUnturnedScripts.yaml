@@ -1,0 +1,57 @@
+name: "Datamine Unturned Scripts"
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  datamine_scripts:
+    name: "Setup Steam -> Get Unturned -> Decompile Scripts"
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: "Checkout Output Scripts"
+      uses: actions/checkout@v7
+
+    - name: "Checkout Datamining Tool"
+      uses: actions/checkout@v7
+      with:
+        repository: Unturned-Scripts/UnturnedScriptsDecompiler
+        path: tool
+
+    - name: "Setup SteamCMD"
+      uses: andriivitiv/setup-steamcmd@v1
+
+    - name: "Install Unturned"
+      run: steamcmd +force_install_dir ${{ github.workspace }}/steam +login ${{ secrets.STEAM_USERNAME }} ${{ secrets.STEAM_PASSWORD }} +app_update 304930 -beta preview -validate +quit
+
+    - name: "Setup Dotnet"
+      uses: actions/setup-dotnet@v5.4.0
+      with:
+        dotnet-version: '10.x'
+
+    - name: "Install Dependancies"
+      run: dotnet restore tool/UnturnedScriptsDecompiler/
+
+    - name: "Decompile Scripts"
+      if: ${{ github.event_name == 'workflow_dispatch' }}
+      run: dotnet run --project ./tool/UnturnedScriptsDecompiler/UnturnedScriptsDecompiler/UnturnedScriptsDecompiler.csproj -c Release --no-restore -- ${{ github.workspace }} ${{ github.workspace }}/steam ${{ github.event_name == 'workflow_dispatch' }}
+    
+    - name: "Copy THIRDPARTYNOTICES.txt"
+      run: cp /steam/THIRDPARTYNOTICES.txt THIRDPARTYNOTICES.txt
+    
+    - name: "Forward Commit Message"
+      run: |
+        msg=$( cat .commit )
+        echo "message=$msg" >> "$GITHUB_OUTPUT"
+      id: forward_commit_message
+      
+    - name: "Git Commit"
+      run: |
+        git config --global user.name "Gamingtoday093"
+        
+        git add -A
+        git status
+        git commit -m "${{ steps.forward_commit_message.outputs.message }}"
+        git push

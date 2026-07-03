@@ -1,0 +1,7 @@
+# Github Action
+/steamcmd/
+/tool/
+.commit
+
+# Steam Install
+/steam/
