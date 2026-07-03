@@ -1,0 +1,79 @@
+using System;
+using SDG.Unturned;
+using UnityEngine;
+
+namespace SDG.Framework.Devkit
+{
+    // Volumes use the Scale of the GameObject as the Size for the Volume, No Colliders Required but you can still use one by Assigning your Collider to the volumeCollider field
+    // This Volume Script should be attached to an Empty GameObject with Tag and Layer :: Trap
+    // To Visualize the Size of the Volume Temporarily Attach either a BoxCollider or a SphereCollider. Making sure that the Collider Component uses the default Radius ( 0.5 ) or Size ( 1 1 1 )
+    [AddComponentMenu("Unturned Scripts/Volumes/Ambiance Volume")]
+    public class AmbianceVolume : MonoBehaviour
+    {
+        [SerializeField]
+        internal Guid _effectGuid;
+
+        [SerializeField]
+        protected ushort _id;
+
+        [SerializeField]
+        protected bool _noWater;
+
+        [SerializeField]
+        protected bool _noLighting;
+
+        [SerializeField]
+        public uint weatherMask = uint.MaxValue;
+
+        [SerializeField]
+        protected EAmbianceVolumeFogOverrideMode _fogOverrideMode;
+
+        [SerializeField]
+        protected bool _overrideFog;
+
+        [SerializeField]
+        protected Color _fogColor = Color.white;
+
+        [SerializeField]
+        protected float _fogIntensity;
+
+        [SerializeField]
+        public bool overrideAtmosphericFog;
+
+        [SerializeField]
+        public bool enableFalloff;
+
+        public int priority;
+
+        public float audioFadeInDuration = 2f;
+
+        public float audioFadeOutDuration = 2f;
+
+        public float fogFadeInDuration = 20f;
+
+        public float fogFadeOutDuration = 8f;
+
+        public float lightingFadeInDuration = 4f;
+
+        public float lightingFadeOutDuration = 4f;
+
+        // --- Inherited Members ---
+
+        [SerializeField]
+        private ELevelVolumeShape _shape;
+
+        public float falloffDistance;
+
+        [SerializeField]
+        internal Collider volumeCollider;
+
+        [SerializeField]
+        protected GameObject editorGameObject;
+
+        [SerializeField]
+        protected MeshFilter editorMeshFilter;
+
+        [SerializeField]
+        protected MeshRenderer editorMeshRenderer;
+    }
+}
