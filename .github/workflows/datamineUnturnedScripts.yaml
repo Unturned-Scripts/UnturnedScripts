@@ -38,14 +38,14 @@ jobs:
       run: dotnet restore tool/UnturnedScriptsDecompiler/
 
     - name: "Decompile Scripts"
-      run: dotnet run --project ./tool/UnturnedScriptsDecompiler/UnturnedScriptsDecompiler.csproj -c Release --no-restore -- ${{ github.workspace }} ${{ github.workspace }}/steam false
+      run: dotnet run --project ./tool/UnturnedScriptsDecompiler/UnturnedScriptsDecompiler.csproj -c Release --no-restore -- ${{ github.workspace }} ${{ github.workspace }}/steam ${{ github.event_name == 'workflow_dispatch' }}
     
     - name: "Skipping for Same Build Version"
       shell: bash
       run: |
         should_skip=false
         [[ -f .commit ]] && should_skip=true
-        echo "should_skip=true" >> "$GITHUB_OUTPUT"
+        echo "should_skip=$should_skip" >> "$GITHUB_OUTPUT"
       id: skipping_decompile
     
     - name: "Copy THIRDPARTYNOTICES.txt"
