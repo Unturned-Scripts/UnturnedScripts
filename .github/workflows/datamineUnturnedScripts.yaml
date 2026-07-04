@@ -41,7 +41,13 @@ jobs:
       run: dotnet run --project ./tool/UnturnedScriptsDecompiler/UnturnedScriptsDecompiler.csproj -c Release --no-restore -- ${{ github.workspace }} ${{ github.workspace }}/steam false
     
     - name: "Skipping for Same Build Version"
-      run: [[ -f .commit ]] && echo "should_skip=true" >> "$GITHUB_OUTPUT" || echo "should_skip=false" >> "$GITHUB_OUTPUT"
+      shell: bash
+      run: |
+        if [[ -f .commit ]]; then
+          echo "should_skip=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "should_skip=false" >> "$GITHUB_OUTPUT"
+        fi
       id: skipping_decompile
     
     - name: "Copy THIRDPARTYNOTICES.txt"
