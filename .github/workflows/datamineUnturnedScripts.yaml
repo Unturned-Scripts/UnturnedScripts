@@ -38,19 +38,25 @@ jobs:
       run: dotnet restore tool/UnturnedScriptsDecompiler/
 
     - name: "Decompile Scripts"
-      if: ${{ github.event_name == 'workflow_dispatch' }}
-      run: dotnet run --project ./tool/UnturnedScriptsDecompiler/UnturnedScriptsDecompiler.csproj -c Release --no-restore -- ${{ github.workspace }} ${{ github.workspace }}/steam ${{ github.event_name == 'workflow_dispatch' }}
+      run: dotnet run --project ./tool/UnturnedScriptsDecompiler/UnturnedScriptsDecompiler.csproj -c Release --no-restore -- ${{ github.workspace }} ${{ github.workspace }}/steam false
+    
+    - name: "Skipping for Same Build Version"
+      run: [[ -f .commit ]] && echo "should_skip=true" >> "$GITHUB_OUTPUT" || echo "should_skip=false" >> "$GITHUB_OUTPUT"
+      id: skipping_decompile
     
     - name: "Copy THIRDPARTYNOTICES.txt"
+      if: steps.skipping_decompile.outputs.should_skip == 'false'
       run: cp steam/THIRDPARTYNOTICES.txt THIRDPARTYNOTICES.txt
     
     - name: "Forward Commit Message"
+      if: steps.skipping_decompile.outputs.should_skip == 'false'
       run: |
         msg=$( cat .commit )
         echo "message=$msg" >> "$GITHUB_OUTPUT"
       id: forward_commit_message
       
     - name: "Git Commit"
+      if: steps.skipping_decompile.outputs.should_skip == 'false'
       run: |
         git config --global user.email "gamingtoday093@users.noreply.github.com"
         git config --global user.name "Gamingtoday093"
