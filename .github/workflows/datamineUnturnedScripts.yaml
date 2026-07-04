@@ -43,26 +43,24 @@ jobs:
     - name: "Skipping for Same Build Version"
       shell: bash
       run: |
-        if [[ -f .commit ]]; then
-          echo "should_skip=true" >> "$GITHUB_OUTPUT"
-        else
-          echo "should_skip=false" >> "$GITHUB_OUTPUT"
-        fi
+        should_skip=false
+        [[ -f .commit ]] && should_skip=true
+        echo "should_skip=true" >> "$GITHUB_OUTPUT"
       id: skipping_decompile
     
     - name: "Copy THIRDPARTYNOTICES.txt"
-      if: steps.skipping_decompile.outputs.should_skip == 'false'
+      if: ${{ steps.skipping_decompile.outputs.should_skip == 'false' }}
       run: cp steam/THIRDPARTYNOTICES.txt THIRDPARTYNOTICES.txt
     
     - name: "Forward Commit Message"
-      if: steps.skipping_decompile.outputs.should_skip == 'false'
+       if: ${{ steps.skipping_decompile.outputs.should_skip == 'false' }}
       run: |
         msg=$( cat .commit )
         echo "message=$msg" >> "$GITHUB_OUTPUT"
       id: forward_commit_message
       
     - name: "Git Commit"
-      if: steps.skipping_decompile.outputs.should_skip == 'false'
+      if: ${{ steps.skipping_decompile.outputs.should_skip == 'false' }}
       run: |
         git config --global user.email "gamingtoday093@users.noreply.github.com"
         git config --global user.name "Gamingtoday093"
